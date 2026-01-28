@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<Container>
+  <Name>Radarr-AirDCPP-v6</Name>
+  <Repository>buzdriver/radarr-airdcpp-v6:latest</Repository>
+  <Network>bridge</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://hub.docker.com/repository/docker/buzdriver/radarr-airdcpp-v6</Support>
+  <Project>https://hub.docker.com/repository/docker/buzdriver/radarr-airdcpp-v6</Project>
+  <Overview>Radarr with AirDC++ index- and downloader</Overview>
+  <Category>Media</Category>
+  <WebUI>http://[IP]:[PORT:7878]</WebUI>
+
+  <!-- Ports -->
+  <Config Name="WEBUI_PORT" Target="7878" Default="7878" Description="WebUI Port" Type="Port" Display="always" />
+
+  <!-- Paths (Volumes) -->
+  <Config Name="CONFIG_PATH" Target="/config" Default="/mnt/cache/appdata/Radarr-AirDCPP-docker" Mode="rw" Description="Radarr config path" Type="Path" Display="always" />
+  <Config Name="DOWNLOADS_PATH" Target="/CacheMedia/Downloads" Default="/mnt/cache/CacheMedia/Downloads" Mode="rw" Description="AirDCPP downloads path" Type="Path" Display="always" />
+  <Config Name="RAR2FS_PATH" Target="/mnt/rar2fs" Default="/mnt/cache/appdata/rar2fs/unraid/#MOVIES" Mode="rw" Description="rar2fs extracted movie path" Type="Path" Display="always" />
+  <Config Name="SYMLINK_PATH" Target="/mnt/symlink" Default="/mnt/user/Media/SymLink" Mode="rw" Description="Radarr symlink output path" Type="Path" Display="always" />
+  <Config Name="MOVIES_PATH" Target="/mnt/movies" Default="/mnt/user/Media/#MOVIES" Mode="rw" Description="Movies library path" Type="Path" Display="always" />
+
+  <!-- Environment Variables -->
+  <Config Name="PUID" Target="PUID" Default="99" Description="User ID (PUID) to run the container as" Type="Variable" Display="always" />
+  <Config Name="PGID" Target="PGID" Default="100" Description="Group ID (PGID) to run the container as" Type="Variable" Display="always" />
+</Container>

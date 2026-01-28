@@ -1,0 +1,47 @@
+FROM ghcr.io/linuxserver/baseimage-ubuntu:focal
+
+ARG DEBIAN_FRONTEND=noninteractive
+ENV XDG_CONFIG_HOME="/config/xdg"
+
+RUN echo "**** install base deps ****" && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y \
+        ca-certificates \
+        curl \
+        gnupg \
+        jq \
+        libicu66 \
+        libmediainfo0v5 \
+        sqlite3 \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN echo "**** install aspnetcore runtime 8 (net8.0.12 compatible) ****" && \
+    curl -fsSL https://packages.microsoft.com/keys/microsoft.asc \
+      | gpg --dearmor -o /usr/share/keyrings/microsoft.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft.gpg] https://packages.microsoft.com/ubuntu/20.04/prod focal main" \
+      > /etc/apt/sources.list.d/microsoft-prod.list && \
+    apt-get update && \
+    apt-get install --no-install-recommends -y aspnetcore-runtime-8.0 && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN echo "**** install radarr-airdcpp ****" && \
+    mkdir -p /app/radarr/bin && \
+    curl -L -o /tmp/radarr.tar.gz \
+      "https://github.com/nls44/Radarr-AirDCPP/releases/download/v6.0.0.11/Radarr.AirDCPP.6.0.0.11.linux-x64.tar.gz" && \
+    tar -xzf /tmp/radarr.tar.gz -C /app/radarr/bin --strip-components=1 Radarr && \
+    rm -rf /tmp/* \
+           /app/radarr/bin/Radarr.Update \
+           /var/tmp/*
+
+RUN echo "**** s6 service ****" && \
+    mkdir -p /etc/services.d/radarr && \
+    printf '%s\n' \
+      '#!/bin/sh' \
+      'exec dotnet /app/radarr/bin/Radarr.dll --nobrowser --data=/config' \
+      > /etc/services.d/radarr/run && \
+    chmod +x /etc/services.d/radarr/run
+
+COPY root/ /
+
+EXPOSE 7878
+VOLUME /config
