@@ -22,7 +22,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: yourdockerhubusername/radarr-airdcpp
+          images: buzdriver/radarr-airdcpp-v6
           tags: |
             type=raw,value=latest
             type=ref,event=tag
