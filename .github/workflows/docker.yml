@@ -43,5 +43,5 @@ jobs:
           push: true
           pull: true
           tags: |
-            buzdriver/radarr-airdcpp-v5:latest
+            buzdriver/radarr-airdcpp-v6:latest
             buzdriver/radarr-airdcpp-v6:${{ steps.version.outputs.version }}
